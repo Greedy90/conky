@@ -1,0 +1,137 @@
+# Conky, a system monitor, based on torsmo
+#
+# Any original torsmo code is licensed under the BSD license
+#
+# All code written since the fork of torsmo is licensed under the GPL
+#
+# Please see COPYING for details
+#
+# Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
+# Copyright (c) 2005-2007 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
+# All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/&gt;.
+#
+# $Id: conky.conf 990 2007-11-22 19:38:17Z pkovacs $#background yes
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+# fiddle with window
+use_spacer yes
+use_xft no
+
+# Update interval in seconds
+update_interval 1
+
+# Minimum size of text area
+# minimum_size 250 5
+
+# Draw shades?
+draw_shades yes
+
+# Text stuff
+draw_outline no # amplifies text if yes
+draw_borders no
+#font arial
+uppercase no # set to yes if you want all text to be in uppercase
+text_buffer_size 256
+
+# Stippled borders?
+stippled_borders 3
+
+# border margins
+border_margin 9
+
+# border width
+border_width 10
+
+# Default colors and also border colors, grey90 == #e5e5e5
+default_color grey
+
+own_window_colour brown
+own_window_transparent yes
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+gap_x 10
+gap_y 0
+
+# stuff after ‘TEXT’ will be formatted on screen
+
+TEXT
+$color
+${color green}SYSTEM ${hr 2}$color
+$nodename $sysname $kernel on $machine
+Uptime: ${uptime}
+#Power: ${acpiacadapter}
+Battery status: ${battery} ${battery_time}
+
+${color green}CPU ${hr 2}$color
+Working frequency: ${freq} MHz
+Load: ${loadavg} $alignr Temp: ${acpitemp}C
+
+CPU usage: ${cpu}% $cpubar
+$color
+${cpugraph 000000 ffffff}
+
+${color green}MEMORY ${hr 2}$color
+RAM: $alignc$mem / $memmax $alignr$memperc%
+${membar 6}$color
+
+${color green}PROCESSES ${hr 2}$color
+Running: ${running_processes}
+Total: ${processes}
+
+NAME		   PID	 CPU%	 MEM%
+${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
+${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+
+${color green}DISK ${hr 2}$color
+HDD I/O $alignr${diskio}/s
+${diskiograph 000000 ffffff}
+
+/ $alignc${fs_used /} / ${fs_size /} $alignr${fs_used_perc /}%
+${fs_bar 6 /}$color
+~ $alignc${fs_used /home} / ${fs_size /home} $alignr${fs_used_perc /home}%
+${fs_bar 6 /home}$color
+Shared $alignc${fs_used /media/Shared} / ${fs_size /media/Shared} $alignr${fs_used_perc /media/Shared}%
+${fs_bar 6 /media/Shared}$color
+
+${color green}NETWORK ${hr 2}$color
+TCP connections:
+inbound: ${tcp_portmon 1 32767 count} - ${alignc}outbound: ${tcp_portmon 32768 61000 count} $alignr total: ${tcp_portmon 1 65535 count} 
+
+${color green}eth0 (${addr eth0}) ${hr 1}$color
+Down: $color${downspeed eth0}/s ${alignr}Up: ${upspeed eth0}/s
+${downspeedgraph eth0 25,140 000000 ff0000} ${alignr}${upspeedgraph eth0 25,140 000000 00ff00}$color
+Total: ${totaldown eth0} ${alignr}Total: ${totalup eth0}
+
+${color green}wlan0 (${addr wlan0}) ${hr 1}$color
+Connected to ${wireless_essid wlan0} $alignr Signal: ${wireless_link_qual_perc wlan0}%
+Down: $color${downspeed wlan0}/s ${alignr}Up: ${upspeed wlan0}/s
+${downspeedgraph wlan0 25,140 000000 ff0000} ${alignr}${upspeedgraph wlan0 25,140 000000 00ff00}$color
+Total: ${totaldown wlan0} ${alignr}Total: ${totalup wlan0}
+
+${color green}SYSLOG ${hr 2}$color
+${execi 2 tail -n1 /var/log/syslog | fold -w50}
